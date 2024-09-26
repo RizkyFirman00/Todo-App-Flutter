@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:belajar_state_management/model/item.dart';
+import 'package:belajar_state_management/view model/item_provider.dart';
 
 class AddItem extends StatefulWidget {
   const AddItem({super.key});
@@ -8,8 +11,13 @@ class AddItem extends StatefulWidget {
 }
 
 class _AddItemState extends State<AddItem> {
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _subTitleController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    final itemProvider = Provider.of<ItemProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
@@ -33,6 +41,7 @@ class _AddItemState extends State<AddItem> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 40),
             child: TextField(
+              controller: _titleController,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
                 labelText: "Title",
@@ -42,6 +51,7 @@ class _AddItemState extends State<AddItem> {
           Padding(
             padding: const EdgeInsets.only(right: 30, left: 30, bottom: 30),
             child: TextField(
+              controller: _subTitleController,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
                 labelText: "Sub Title",
@@ -54,8 +64,16 @@ class _AddItemState extends State<AddItem> {
               height: 60,
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
-                child: Text(
+                onPressed: () {
+                  final item = Item(
+                    title: _titleController.text,
+                    subTitle: _subTitleController.text,
+                    isCompleted: false,
+                  );
+                  itemProvider.addItem(item);
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
                   "ADD",
                   style: TextStyle(fontSize: 20),
                 ),
