@@ -13,8 +13,15 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        textTheme: GoogleFonts.jostTextTheme(),
-      ),
+          textTheme: GoogleFonts.jostTextTheme(),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ButtonStyle(
+                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15))),
+                  textStyle: WidgetStatePropertyAll(
+                      TextStyle(fontWeight: FontWeight.w600)),
+                  foregroundColor: WidgetStatePropertyAll(Colors.white),
+                  backgroundColor: WidgetStatePropertyAll(Color(0xff9395D3))))),
       debugShowCheckedModeBanner: false,
       home: const Home(),
     );

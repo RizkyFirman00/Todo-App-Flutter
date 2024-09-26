@@ -1,5 +1,7 @@
 import "dart:ffi";
-
+import "package:belajar_state_management/add_item.dart";
+import "package:belajar_state_management/list_item.dart";
+import "package:belajar_state_management/model/item.dart";
 import "package:flutter/material.dart";
 
 class Home extends StatefulWidget {
@@ -10,12 +12,18 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List<Item> todoList = [
+    Item(title: "Belajar Flutter", subTitle: "State management"),
+    Item(title: "Maen game", subTitle: "Sampe jam 10 aja"),
+    Item(title: "Tidur jam 12", subTitle: "Jangan maen hp"),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFD6D7EF),
+      backgroundColor: const Color(0xFFD6D7EF),
       appBar: AppBar(
-        backgroundColor: Color(0xFF9395D3),
+        backgroundColor: const Color(0xFF9395D3),
         title: const Padding(
           padding: EdgeInsets.only(left: 10),
           child: Text(
@@ -61,17 +69,20 @@ class _HomeState extends State<Home> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xFF9395D3),
-        shape: CircleBorder(),
-        onPressed: () {},
-        child: Icon(
+        backgroundColor: const Color(0xFF9395D3),
+        shape: const CircleBorder(),
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => const AddItem()));
+        },
+        child: const Icon(
           Icons.add,
           size: 30,
           color: Colors.white,
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
             label: 'All',
@@ -83,7 +94,25 @@ class _HomeState extends State<Home> {
         ],
       ),
       body: SafeArea(
-        child: Container(),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: ListView.builder(
+            itemCount: todoList.length,
+            itemBuilder: (context, index) {
+              return ListItem(
+                item: todoList[index],
+                onToggle: () {
+                  setState(
+                    () {
+                      todoList[index].isCompleted =
+                          !todoList[index].isCompleted;
+                    },
+                  );
+                },
+              );
+            },
+          ),
+        ),
       ),
     );
   }
