@@ -8,9 +8,9 @@ class EditItem extends StatefulWidget {
   final Item item;
 
   const EditItem({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   @override
   State<EditItem> createState() => _EditItemState();
@@ -27,7 +27,7 @@ class _EditItemState extends State<EditItem> {
     _subTitleController.text = widget.item.subTitle;
   }
 
-  void _showDeleteConfirmation(BuildContext context) {
+  void _showDeleteConfirmation(BuildContext context, ItemProvider itemProvider) {
     showDialog(
       context: context,
       builder: (context) {
@@ -35,10 +35,8 @@ class _EditItemState extends State<EditItem> {
           title: 'Delete Task',
           message: 'Just to confirm, do you really want to delete this task?',
           onConfirm: () {
-            final itemProvider =
-                Provider.of<ItemProvider>(context, listen: false);
-            itemProvider.deleteItem(widget.item);
-            Navigator.of(context).pop(true);
+            itemProvider.deleteItem(widget.item.id!);
+            Navigator.of(context).pop();
           },
           onCancel: () {},
         );
@@ -104,10 +102,10 @@ class _EditItemState extends State<EditItem> {
                           subTitle: _subTitleController.text,
                           isCompleted: widget.item.isCompleted,
                         );
-                        itemProvider.updateItem(widget.item, updatedItem);
-                        Navigator.of(context).pop(true);
+                        itemProvider.updateItem(updatedItem);
+                        Navigator.of(context).pop();
                       },
-                      child: Text(
+                      child: const Text(
                         "Update",
                         style: TextStyle(fontSize: 20),
                       ),
@@ -123,9 +121,9 @@ class _EditItemState extends State<EditItem> {
                     height: 60,
                     child: ElevatedButton(
                       onPressed: () {
-                        _showDeleteConfirmation(context);
+                        _showDeleteConfirmation(context, itemProvider);
                       },
-                      child: Text(
+                      child: const Text(
                         "Delete",
                         style: TextStyle(fontSize: 20),
                       ),

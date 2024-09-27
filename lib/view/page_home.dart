@@ -17,6 +17,12 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+    Provider.of<ItemProvider>(context, listen: false).loadItems();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final itemProvider = Provider.of<ItemProvider>(context);
     String currentDate = DateFormat('d').format(DateTime.now());
@@ -112,20 +118,20 @@ class _HomeState extends State<Home> {
               child: ListView.builder(
                 itemCount: itemProvider.items.length,
                 itemBuilder: (context, index) {
+                  final item = itemProvider.items[index];
                   return ListItem(
                     item: itemProvider.items[index],
-                    onToggle: () {
-                      setState(
-                        () {
-                          itemProvider.items[index].isCompleted =
-                              !itemProvider.items[index].isCompleted;
-                        },
-                      );
-                    },
                     onDelete: () {
                       setState(
                         () {
-                          itemProvider.items.removeAt(index);
+                          itemProvider.deleteItem(index);
+                        },
+                      );
+                    },
+                    onToggle: () {
+                      setState(
+                        () {
+                          itemProvider.toggleItemCompletion(item);
                         },
                       );
                     },
@@ -141,14 +147,6 @@ class _HomeState extends State<Home> {
                 itemBuilder: (context, index) {
                   return ListCompletedItem(
                     item: itemProvider.completedItems[index],
-                    onToggle: () {
-                      setState(
-                        () {
-                          itemProvider.completedItems[index].isCompleted =
-                              !itemProvider.completedItems[index].isCompleted;
-                        },
-                      );
-                    },
                   );
                 },
               ),

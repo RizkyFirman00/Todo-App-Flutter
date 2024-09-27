@@ -1,3 +1,4 @@
+import 'package:belajar_state_management/database/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:belajar_state_management/model/item.dart';
@@ -15,8 +16,43 @@ class _AddItemState extends State<AddItem> {
   final TextEditingController _subTitleController = TextEditingController();
 
   @override
+  void dispose() {
+    _titleController.dispose();
+    _subTitleController.dispose();
+    super.dispose();
+  }
+
+  void _clearInputs() {
+    _titleController.clear();
+    _subTitleController.clear();
+  }
+
+  void _addItem(BuildContext context) {
+    String title = _titleController.text;
+    String subTitle = _subTitleController.text;
+
+    if (title.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Title cannot be empty')),
+      );
+      return;
+    }
+
+    if (subTitle.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Sub Title cannot be empty')),
+      );
+      return;
+    }
+
+    final newItem = Item(title: title, subTitle: subTitle);
+    Provider.of<ItemProvider>(context, listen: false).addItem(newItem);
+    Navigator.of(context).pop();
+    _clearInputs();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final itemProvider = Provider.of<ItemProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -64,15 +100,7 @@ class _AddItemState extends State<AddItem> {
               height: 60,
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  final item = Item(
-                    title: _titleController.text,
-                    subTitle: _subTitleController.text,
-                    isCompleted: false,
-                  );
-                  itemProvider.addItem(item);
-                  Navigator.of(context).pop();
-                },
+                onPressed: () => _addItem(context),
                 child: const Text(
                   "ADD",
                   style: TextStyle(fontSize: 20),

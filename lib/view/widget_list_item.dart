@@ -1,5 +1,7 @@
 import 'package:belajar_state_management/view/page_edit_item.dart';
 import 'package:belajar_state_management/model/item.dart';
+import 'package:provider/provider.dart';
+import '../view model/item_provider.dart';
 import 'widget_confirmation_delete.dart';
 import 'package:flutter/material.dart';
 
@@ -9,20 +11,23 @@ class ListItem extends StatelessWidget {
   final VoidCallback onDelete;
 
   const ListItem({
-    Key? key,
+    super.key,
     required this.item,
     required this.onToggle,
     required this.onDelete,
-  }) : super(key: key);
+  });
 
-  void _showDeleteConfirmation(BuildContext context) {
+  void _showDeleteConfirmation(
+      BuildContext context, ItemProvider itemProvider) {
     showDialog(
       context: context,
       builder: (context) {
         return CustomConfirmationDialog(
           title: 'Delete Task',
           message: 'Just to confirm, do you really want to delete this task?',
-          onConfirm: onDelete,
+          onConfirm: () {
+            itemProvider.deleteItem(item.id!);
+          },
           onCancel: () {},
         );
       },
@@ -31,6 +36,7 @@ class ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ItemProvider itemProvider = Provider.of<ItemProvider>(context);
     return Padding(
       padding: const EdgeInsets.only(right: 10, left: 10, bottom: 10),
       child: Card(
@@ -40,24 +46,29 @@ class ListItem extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.title,
-                    style: const TextStyle(
-                      color: Color(0xff9395D3),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.title,
+                      style: const TextStyle(
+                        color: Color(0xff9395D3),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
-                  Text(
-                    item.subTitle,
-                    style: TextStyle(
-                      fontSize: 16,
+                    Text(
+                      item.subTitle,
+                      style: const TextStyle(fontSize: 16),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                ],
+                  ],
+                ),
+              ),
+              const SizedBox(
+                width: 15,
               ),
               Row(
                 children: [
@@ -74,7 +85,7 @@ class ListItem extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {
-                      _showDeleteConfirmation(context);
+                      _showDeleteConfirmation(context, itemProvider);
                     },
                     icon: const Icon(
                       Icons.delete_outline,

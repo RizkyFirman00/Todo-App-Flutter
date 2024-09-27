@@ -7,19 +7,19 @@ class CustomConfirmationDialog extends StatelessWidget {
   final VoidCallback onCancel;
 
   const CustomConfirmationDialog({
-    Key? key,
+    super.key,
     required this.title,
     required this.message,
     required this.onConfirm,
     required this.onCancel,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.w600,
           color: Color(0xff9395D3),

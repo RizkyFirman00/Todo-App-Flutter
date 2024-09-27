@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 
 class ListCompletedItem extends StatelessWidget {
   final Item item;
-  final VoidCallback onToggle;
 
-  const ListCompletedItem(
-      {super.key, required this.item, required this.onToggle});
+  const ListCompletedItem({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -19,24 +17,27 @@ class ListCompletedItem extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.title,
-                    style: TextStyle(
-                      color: const Color(0xff9395D3),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.title,
+                      style: TextStyle(
+                        color: const Color(0xff9395D3),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
-                  Text(
-                    item.subTitle,
-                    style: TextStyle(
-                      fontSize: 16,
+                    Text(
+                      item.subTitle,
+                      overflow: TextOverflow.visible,
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
