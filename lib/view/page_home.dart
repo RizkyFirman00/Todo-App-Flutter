@@ -19,7 +19,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ItemProvider>(context, listen: false).loadItems();
+    Provider.of<ItemProvider>(context, listen: true).loadItems();
   }
 
   @override
@@ -54,7 +54,9 @@ class _HomeState extends State<Home> {
                     size: 40,
                     color: Colors.white,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+
+                  },
                 ),
                 Column(
                   children: [
@@ -112,7 +114,7 @@ class _HomeState extends State<Home> {
         child: IndexedStack(
           index: _selectedIndex,
           children: [
-            // ALL ITEM PAGE
+            // ALL ITEM PAGE //
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: ListView.builder(
@@ -139,7 +141,7 @@ class _HomeState extends State<Home> {
                 },
               ),
             ),
-            // COMPLETED ITEM PAGE
+            // COMPLETED ITEM PAGE //
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: ListView.builder(

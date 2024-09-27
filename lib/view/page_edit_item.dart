@@ -81,6 +81,7 @@ class _EditItemState extends State<EditItem> {
           Padding(
             padding: const EdgeInsets.only(right: 30, left: 30, bottom: 30),
             child: TextField(
+
               controller: _subTitleController,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
@@ -98,6 +99,7 @@ class _EditItemState extends State<EditItem> {
                     child: ElevatedButton(
                       onPressed: () {
                         final updatedItem = Item(
+                          id: widget.item.id,
                           title: _titleController.text,
                           subTitle: _subTitleController.text,
                           isCompleted: widget.item.isCompleted,
