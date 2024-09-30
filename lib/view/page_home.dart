@@ -19,7 +19,13 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ItemProvider>(context, listen: true).loadItems();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final itemProvider = Provider.of<ItemProvider>(context, listen: false);
+    itemProvider.loadItems();
   }
 
   @override
@@ -117,7 +123,7 @@ class _HomeState extends State<Home> {
             // ALL ITEM PAGE //
             Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: ListView.builder(
+              child: itemProvider.items.isEmpty ? const Center(child: CircularProgressIndicator(),) : ListView.builder(
                 itemCount: itemProvider.items.length,
                 itemBuilder: (context, index) {
                   final item = itemProvider.items[index];
@@ -126,7 +132,7 @@ class _HomeState extends State<Home> {
                     onDelete: () {
                       setState(
                         () {
-                          itemProvider.deleteItem(index);
+                          itemProvider.deleteItem(item.id!);
                         },
                       );
                     },

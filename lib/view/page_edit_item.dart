@@ -3,6 +3,7 @@ import 'package:belajar_state_management/view%20model/item_provider.dart';
 import 'package:belajar_state_management/view/widget_confirmation_delete.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_logger/simple_logger.dart';
 
 class EditItem extends StatefulWidget {
   final Item item;
@@ -35,8 +36,14 @@ class _EditItemState extends State<EditItem> {
           title: 'Delete Task',
           message: 'Just to confirm, do you really want to delete this task?',
           onConfirm: () {
-            itemProvider.deleteItem(widget.item.id!);
-            Navigator.of(context).pop();
+            if (widget.item.id != null) {
+              itemProvider.deleteItem(widget.item.id!);
+              Navigator.of(context).pop();
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Cannot delete item without ID')),
+              );
+            }
           },
           onCancel: () {},
         );
@@ -81,7 +88,6 @@ class _EditItemState extends State<EditItem> {
           Padding(
             padding: const EdgeInsets.only(right: 30, left: 30, bottom: 30),
             child: TextField(
-
               controller: _subTitleController,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
@@ -98,17 +104,10 @@ class _EditItemState extends State<EditItem> {
                     height: 60,
                     child: ElevatedButton(
                       onPressed: () {
-                        final updatedItem = Item(
-                          id: widget.item.id,
-                          title: _titleController.text,
-                          subTitle: _subTitleController.text,
-                          isCompleted: widget.item.isCompleted,
-                        );
-                        itemProvider.updateItem(updatedItem);
-                        Navigator.of(context).pop();
+                        _showDeleteConfirmation(context, itemProvider);
                       },
                       child: const Text(
-                        "Update",
+                        "Delete",
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
@@ -123,10 +122,23 @@ class _EditItemState extends State<EditItem> {
                     height: 60,
                     child: ElevatedButton(
                       onPressed: () {
-                        _showDeleteConfirmation(context, itemProvider);
+                        final updatedItem = Item(
+                          id: widget.item.id,
+                          title: _titleController.text,
+                          subTitle: _subTitleController.text,
+                          isCompleted: widget.item.isCompleted,
+                        );
+                        if (widget.item.id != null) {
+                          itemProvider.updateItem(updatedItem);
+                          Navigator.of(context).pop();
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Cannot delete item without ID')),
+                          );
+                        }
                       },
                       child: const Text(
-                        "Delete",
+                        "Update",
                         style: TextStyle(fontSize: 20),
                       ),
                     ),

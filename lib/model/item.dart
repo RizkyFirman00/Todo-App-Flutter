@@ -1,7 +1,7 @@
 class Item {
-  final int? id;
-  final String title;
-  final String subTitle;
+  String? id;
+  String title;
+  String subTitle;
   bool isCompleted;
 
   Item({
@@ -11,21 +11,21 @@ class Item {
     this.isCompleted = false,
   });
 
+  factory Item.fromMap(Map<String, dynamic> map, String id) {
+    return Item(
+      id: id,
+      title: map['title'],
+      subTitle: map['subTitle'],
+      isCompleted: map['isCompleted'] == true,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
       'subTitle': subTitle,
-      'isCompleted': isCompleted ? 1 : 0,
+      'isCompleted': isCompleted ? true : false,
     };
-  }
-
-  factory Item.fromMap(Map<String, dynamic> map) {
-    return Item(
-      id: map['id'],
-      title: map['title'],
-      subTitle: map['subTitle'],
-      isCompleted: map['isCompleted'] == 1,
-    );
   }
 }
